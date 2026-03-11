@@ -39,6 +39,9 @@ class ProductPage extends StatelessWidget {
                     onTap: (){
                      Navigator.pushNamed(context,AppRoutes.productDetails,arguments:state.products[index].id );
                     },
+                    onDoubleTap: (){
+
+                    },
                     child: Container(
                       height: 600,
                       decoration: BoxDecoration(
