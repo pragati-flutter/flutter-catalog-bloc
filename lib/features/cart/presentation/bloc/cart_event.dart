@@ -4,11 +4,10 @@ abstract class CartEvent extends Equatable{
 }
 
 class GetCartItems extends CartEvent{
-  final List<CartEntity>getAllCartItems;
-  GetCartItems(this.getAllCartItems);
+
   @override
   // TODO: implement props
-  List<Object?> get props => [getAllCartItems];
+  List<Object?> get props => [];
 
 }
 
@@ -17,7 +16,7 @@ class AddItemsToCartEvent extends  CartEvent{
 
   AddItemsToCartEvent({required this.cartItem});
   @override
-  // TODO: implement props
+
   List<Object?> get props => [cartItem];
 
 }

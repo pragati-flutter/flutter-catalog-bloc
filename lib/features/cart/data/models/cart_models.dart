@@ -17,6 +17,10 @@ class CartItemModel extends CartEntity {
     );
   }
 
+  factory CartItemModel.fromEntity(CartEntity entity){
+    return CartItemModel(quantity:entity.quantity , productEntity: entity.productEntity);
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'product': (productEntity as ProductModel).toJson(),

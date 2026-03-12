@@ -12,29 +12,41 @@ abstract class CartLocalDataSource {
 
 class CartLocalDatasourceImplementation implements CartLocalDataSource {
   final List<CartItemModel> _cartItemList = [];
+
   @override
   void addToCart(CartItemModel cartItem) {
-    final index = _cartItemList.indexWhere(
-      (e) => e.productEntity.id == cartItem.productEntity.id,
-    );
-
-    if (index != -1) {
-      _cartItemList[index] = _cartItemList[index].copyWith(
-        quantity: _cartItemList[index].quantity + 1,
+    try {
+      final index = _cartItemList.indexWhere(
+        (e) => e.productEntity.id == cartItem.productEntity.id,
       );
-    } else {
-      _cartItemList.add(cartItem);
+
+      if (index != -1) {
+        _cartItemList[index] = _cartItemList[index].copyWith(
+          quantity: _cartItemList[index].quantity + 1,
+        );
+      } else {
+        _cartItemList.add(cartItem);
+      }
+    } catch (e) {
+      throw CacheException(e.toString());
     }
   }
 
   @override
   List<CartItemModel> getCartItems() {
-    // TODO: implement getCartItems
-    throw UnimplementedError();
+    try {
+      return _cartItemList;
+    } catch (e) {
+      throw CacheException(e.toString());
+    }
   }
 
   @override
   void removeFromCart(int productId) {
-    // TODO: implement removeFromCart
+    try {
+      _cartItemList.removeWhere((e) => e.productEntity.id == productId);
+    } catch (e) {
+      throw CacheException(e.toString());
+    }
   }
 }

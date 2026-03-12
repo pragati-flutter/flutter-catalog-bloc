@@ -13,7 +13,6 @@ class ProductRepositoryImplementation implements ProductRepository{
   Future<Either<Failure, List<ProductEntity>>> getProducts()async {
     try{
      final productList = await remoteDataSource.getProducts();
-     print("data layer product is given by...${productList}");
      return Right(productList);
     }on NetworkException{
      return Left(NetworkFailure());

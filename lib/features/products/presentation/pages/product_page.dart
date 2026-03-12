@@ -1,4 +1,7 @@
 import 'package:catalog_app/core/routes/app_routes.dart';
+import 'package:catalog_app/core/utils/toast_helper.dart';
+import 'package:catalog_app/features/cart/domain/entites/cart_entity.dart';
+import 'package:catalog_app/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:catalog_app/features/products/presentation/bloc/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +18,13 @@ class ProductPage extends StatelessWidget {
       ),
       backgroundColor: Colors.pink,
         actions: [
-          Icon(Icons.shopping_cart,color: Colors.white,)
+          InkWell(
+              onTap: (){
+
+                Navigator.pushNamed(context, AppRoutes.cartPage);
+                context.read<CartBloc>().add(GetCartItems());
+              },
+              child: Icon(Icons.shopping_cart,color: Colors.white,))
         ],
       ),
       body: BlocBuilder<ProductBloc, ProductState>(
@@ -40,6 +49,9 @@ class ProductPage extends StatelessWidget {
                      Navigator.pushNamed(context,AppRoutes.productDetails,arguments:state.products[index].id );
                     },
                     onDoubleTap: (){
+                      final cartItem = CartEntity(productEntity: state.products[index], quantity: 1);
+                      context.read<CartBloc>().add(AddItemsToCartEvent(cartItem: cartItem));
+                      ToastMessage.showToast(context, "item added successfully");
 
                     },
                     child: Container(
