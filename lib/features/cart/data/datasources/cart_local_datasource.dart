@@ -44,7 +44,17 @@ class CartLocalDatasourceImplementation implements CartLocalDataSource {
   @override
   void removeFromCart(int productId) {
     try {
-      _cartItemList.removeWhere((e) => e.productEntity.id == productId);
+      final index = _cartItemList.indexWhere(
+        (e) => e.productEntity.id == productId,
+      );
+      if (_cartItemList[index].quantity != 1) {
+        _cartItemList[index] = _cartItemList[index].copyWith(
+          quantity: _cartItemList[index].quantity - 1,
+        );
+      } else {
+        _cartItemList.removeWhere((e) => e.productEntity.id == productId);
+        print("now i should remove this item ");
+      }
     } catch (e) {
       throw CacheException(e.toString());
     }

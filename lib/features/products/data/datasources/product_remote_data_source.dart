@@ -6,22 +6,12 @@ import 'package:dio/dio.dart';
 abstract class ProductRemoteDataSource {
   Future<List<ProductModel>> getProducts();
   Future<ProductModel>getProductDetails(int id);
-
-  /* Future<List<ProductModel>>getProducts()async{
-
-  }
-
-
-  Future<List<ProductModel>>searchProducts(String query)async{
-
-  }
-*/
+  Future<List<ProductModel>>searchProduct(String query);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   final DioClient dioClient;
   ProductRemoteDataSourceImpl(this.dioClient);
-  @override
   @override
   Future<List<ProductModel>> getProducts() async {
     try {
@@ -61,4 +51,30 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       throw ServerException();
     }
   }
+
+  @override
+  Future<List<ProductModel>>searchProduct(String query) async {
+    try {
+
+      final response = await dioClient.dio.get('products/search',queryParameters: {'q':query});
+print("hey searching is cll $query");
+      if (response.statusCode == 200) {
+        print("response code i am...${response.statusCode}");
+        final productList = (response.data['products'] as List)
+            .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        print("hello phone i am here  ..${productList[1].images}");
+        return productList;
+      } else {
+        throw ServerException();
+      }
+    } on DioException {
+      throw NetworkException();
+    } catch (e, stackTrace) {
+      throw ServerException();
+    }
+  }
+
+
+
 }

@@ -8,8 +8,8 @@ class ToastMessage{
         content: Text(message,style: TextStyle(
           color: Colors.black,
         ),),
-        duration: Duration(seconds: 10),
-        backgroundColor: Colors.indigo.withAlpha(100),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.indigo,
 
       )
     );

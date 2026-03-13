@@ -22,10 +22,11 @@ class AddItemsToCartEvent extends  CartEvent{
 }
 
 class RemoveItemToCartEvent extends CartEvent{
+  final List<CartEntity>entity;
   final int id;
- RemoveItemToCartEvent(this.id);
+ RemoveItemToCartEvent(this.id,this.entity);
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [id,entity];
 
 }

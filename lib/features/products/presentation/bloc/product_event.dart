@@ -18,3 +18,13 @@ class GetProductDetailEvent extends ProductEvent{
   List<Object?> get props => [id];
 
 }
+
+
+class SearchProductEvent extends ProductEvent{
+  final String query;
+ SearchProductEvent(this.query);
+
+  @override
+  List<Object?> get props => [query];
+
+}

@@ -4,6 +4,7 @@ import 'package:catalog_app/features/cart/domain/usecases/add_to_cart.dart';
 import 'package:catalog_app/features/cart/domain/usecases/get_cart_items.dart';
 import 'package:catalog_app/features/cart/domain/usecases/remove_from_cart.dart';
 import 'package:catalog_app/features/products/data/models/product_models.dart';
+import 'package:catalog_app/features/products/domain/entites/product_entity.dart';
 import 'package:catalog_app/features/products/domain/usecases/get_product_details.dart';
 import 'package:catalog_app/features/products/domain/usecases/get_products.dart';
 import 'package:dartz/dartz.dart';
@@ -33,7 +34,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartLoadingState());
 
       final result = getCartItems();
-      print("result is ....${result}");
+      print("result is ....$result");
       result.fold(
             (failure) => emit(CartError('Cache Error ')),
             (getCartItems) => emit(CartLoadedState(getCartItems)),
@@ -49,7 +50,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartLoadingState());
       final result = addToCart(event.cartItem);
       result.fold((failure) => emit(CartError('Cache error')), (_) =>
-          emit(CartAddedSuccessState("cart added successfully")));
+          emit(CartSuccessState("cart added successfully")));
     } catch (e) {
       emit(CartError(e.toString()));
     }
@@ -61,7 +62,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartLoadingState());
       final result = removeFromCart(event.id);
       result.fold((failure) => emit(CartError('Cache Error')), (_) =>
-          emit(CartAddedSuccessState("cart added successfully")));
+          emit(CartSuccessState("cart remove successfully")));
+      emit(CartLoadedState(event.entity));
+
     } catch (e) {
       emit(CartError(e.toString()));
     }

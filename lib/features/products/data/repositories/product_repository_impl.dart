@@ -5,40 +5,47 @@ import 'package:catalog_app/features/products/domain/entites/product_entity.dart
 import 'package:catalog_app/features/products/domain/repositories/product_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class ProductRepositoryImplementation implements ProductRepository{
+class ProductRepositoryImplementation implements ProductRepository {
   final ProductRemoteDataSource remoteDataSource;
-   ProductRepositoryImplementation(this.remoteDataSource);
+  ProductRepositoryImplementation(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> getProducts()async {
-    try{
-     final productList = await remoteDataSource.getProducts();
-     return Right(productList);
-    }on NetworkException{
-     return Left(NetworkFailure());
-    }on ServerException{
+  Future<Either<Failure, List<ProductEntity>>> getProducts() async {
+    try {
+      final productList = await remoteDataSource.getProducts();
+      return Right(productList);
+    } on NetworkException {
+      return Left(NetworkFailure());
+    } on ServerException {
       return Left(ServerFailure());
     }
-
-
   }
 
   @override
   Future<Either<Failure, ProductEntity>> getProductDetails(int id) async {
-  try{
-    final product = await remoteDataSource.getProductDetails(id);
-    return Right(product);
-  }on NetworkException{
-   return Left(NetworkFailure());
-  }on ServerException{
-   return Left(ServerFailure());
+    try {
+      final product = await remoteDataSource.getProductDetails(id);
+      return Right(product);
+    } on NetworkException {
+      return Left(NetworkFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
   }
+
+
+  @override
+  Future<Either<Failure, List<ProductEntity>>> searchProduct(
+    String query,
+  ) async {
+    try {
+      print("data level query is given by ...${query}");
+      final productList = await remoteDataSource.searchProduct(query);
+      return Right(productList);
+    } on NetworkException {
+      return Left(NetworkFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
   }
-
-
-
-
-
-
-
 }

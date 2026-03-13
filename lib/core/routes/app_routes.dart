@@ -8,6 +8,7 @@ import 'package:catalog_app/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:catalog_app/features/cart/presentation/pages/cart_page.dart';
 import 'package:catalog_app/features/products/domain/usecases/get_product_details.dart';
 import 'package:catalog_app/features/products/domain/usecases/get_products.dart';
+import 'package:catalog_app/features/products/domain/usecases/search_products.dart';
 import 'package:catalog_app/features/products/presentation/pages/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,6 +46,7 @@ class AppRoutes {
                 create: (context) => ProductBloc(
                   context.read<GetProducts>(),
                   context.read<GetProductDetails>(),
+                  context.read<SearchProducts>(),
                 )..add(GetProductEvent()),
                 child: const ProductPage(),
               ),
@@ -62,6 +64,7 @@ class AppRoutes {
                 create: (context) => ProductBloc(
                   context.read<GetProducts>(),
                   context.read<GetProductDetails>(),
+                  context.read<SearchProducts>()
                 )..add(GetProductDetailEvent(productId)),
                 child: ProductDetailPage(),
               ),

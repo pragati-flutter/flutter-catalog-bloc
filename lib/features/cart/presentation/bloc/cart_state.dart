@@ -28,9 +28,9 @@ class CartLoadedState extends CartState{
 
 }
 
-class CartAddedSuccessState extends CartState{
+class CartSuccessState extends CartState{
   final String message;
-  CartAddedSuccessState(this.message);
+  CartSuccessState(this.message);
   @override
   List<Object?> get props => [message];
 

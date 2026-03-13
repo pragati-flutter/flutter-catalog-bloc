@@ -2,6 +2,7 @@ import 'package:catalog_app/core/error/failure.dart';
 import 'package:catalog_app/features/products/data/models/product_models.dart';
 import 'package:catalog_app/features/products/domain/usecases/get_product_details.dart';
 import 'package:catalog_app/features/products/domain/usecases/get_products.dart';
+import 'package:catalog_app/features/products/domain/usecases/search_products.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -14,9 +15,11 @@ part 'product_state.dart';
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final GetProducts getProducts;
   final GetProductDetails getProductDetails;
-  ProductBloc(this.getProducts,this.getProductDetails) : super(ProductInitialState()) {
+  final SearchProducts searchProducts;
+  ProductBloc(this.getProducts,this.getProductDetails,this.searchProducts) : super(ProductInitialState()) {
     on<GetProductEvent>(_onGetProductEvent);
     on<GetProductDetailEvent>(_onGetProductDetailEvent);
+    on<SearchProductEvent>(_onSearchProductEvent);
   }
 
   Future<void> _onGetProductEvent(
@@ -43,10 +46,30 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ) async {
     try {
       emit(ProductLoadingState());
-      final result = await getProducts.getProductDetails(event.id);
+      final result = await getProductDetails.getProductDetails(event.id);
       result.fold(
         (failure) => emit(ProductError(_mapFailureToMessage(failure))),
         (product) => emit(ProductDetailLoadedState(product)),
+
+      );
+    } catch (e) {
+      emit(ProductError('Unexpected error'));
+    }
+  }
+
+
+
+  Future<void> _onSearchProductEvent(
+      SearchProductEvent event,
+      Emitter<ProductState> emit,
+      ) async {
+    try {
+      emit(ProductLoadingState());
+      print("event query is given by ...${event.query}");
+      final result = await searchProducts(event.query);
+      result.fold(
+            (failure) => emit(SearchProductError(_mapFailureToMessage(failure))),
+            (product) => emit(ProductLoadedState(product)),
       );
     } catch (e) {
       emit(ProductError('Unexpected error'));

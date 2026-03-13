@@ -1,4 +1,5 @@
 import 'package:catalog_app/features/products/domain/usecases/get_product_details.dart';
+import 'package:catalog_app/features/products/domain/usecases/search_products.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,6 +29,8 @@ class ProductDependencies extends StatelessWidget {
           ),
         ),
 
+
+
         RepositoryProvider<GetProducts>(
           create: (context) =>
               GetProducts(context.read<ProductRepository>()),
@@ -36,6 +39,10 @@ class ProductDependencies extends StatelessWidget {
         RepositoryProvider<GetProductDetails>(
           create: (context) =>
               GetProductDetails(context.read<ProductRepository>()),
+        ),
+        RepositoryProvider<SearchProducts>(
+          create: (context) =>
+              SearchProducts(context.read<ProductRepository>()),
         ),
       ],
       child: child,

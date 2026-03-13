@@ -36,6 +36,16 @@ class ProductDetailLoadedState extends ProductState{
 
 }
 
+
+class SearchProductError extends ProductState{
+  final String message;
+  SearchProductError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+
+}
+
 class ProductError extends ProductState{
   final String message;
   ProductError(this.message);

@@ -11,14 +11,9 @@ GetProducts(this.productRepository);
 Future<Either<Failure,List<ProductEntity>>>getAllProducts(){
   return productRepository.getProducts();
 
-
 }
 
-Future<Either<Failure,ProductEntity>>getProductDetails(int id){
-  return productRepository.getProductDetails(id);
 
-
-}
 
 
 }
