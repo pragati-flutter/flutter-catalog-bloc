@@ -1,6 +1,5 @@
 import 'package:catalog_app/core/utils/toast_helper.dart';
 import 'package:catalog_app/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:catalog_app/features/products/presentation/widgets/product_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +19,7 @@ class CartPage extends StatelessWidget {
           if (state is CartLoadingState) {
             return Center(child: CircularProgressIndicator());
           }
-          if (state is CartLoadedState) {
+         /* if (state is CartLoadedState) {
             if(state.products.isEmpty){
               return Center(child: Text("product not found"),);
             }
@@ -65,7 +64,7 @@ class CartPage extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Spacer(),
+                                  Spacer(), 
                                   InkWell(
                                       onTap: (){
                                         context.read<CartBloc>().add(RemoveItemToCartEvent(product.id,state.products));
@@ -115,6 +114,17 @@ class CartPage extends StatelessWidget {
                   ),
                 );
               },
+            );
+          }*/
+
+
+
+          if (state is CartLoadedState) {
+            if(state.products.isEmpty){
+              return Center(child: Text("hello world"),);
+            }
+            return Container(
+              child: Center(child: Text("hello machine")),
             );
           }
 
