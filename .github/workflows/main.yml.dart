@@ -1,31 +1,42 @@
+name: Build & Release
+
 on:
-pull_request:
-branches:
-- main
-- master
 push:
 branches:
 - main
 - master
 - develop
-name: "Build & Release"
+pull_request:
+branches:
+- main
+- master
+
 jobs:
 build:
 name: Build & Release
 runs-on: macos-latest
+
 steps:
 - uses: actions/checkout@v3
+
 - uses: actions/setup-java@v3
 with:
 distribution: 'zulu'
 java-version: '12'
+
 - uses: subosito/flutter-action@v2
 with:
 channel: 'stable'
 architecture: x64
 
-- run: flutter build appbundle --release
-- run:
+- name: Install dependencies
+run: flutter pub get
+
+- name: Build Android AAB
+run: flutter build appbundle --release
+
+- name: Build iOS (no codesign)
+run: |
 flutter build ios --no-codesign
 cd build/ios/iphoneos
 mkdir Payload
@@ -33,17 +44,10 @@ cd Payload
 ln -s ../Runner.app
 cd ..
 zip -r app.ipa Payload
-- name: Push to Releases
+
+- name: Upload to Releases
 uses: ncipollo/release-action@v1
 with:
-artifacts: "build/app/outputs/bundle/release/app-release.aab,build/ios/iphoneos/app.ipa"
+artifacts: build/app/outputs/bundle/release/app-release.aab,build/ios/iphoneos/app.ipa
 tag: v1.0.${{ github.run_number }}
-token: ${{ secrets.TOKEN }}
-
-
-
-
-
-
-# push to master, main, develop
-# pull request on main master
+token: ${{ secrets.GITHUB_TOKEN }}
