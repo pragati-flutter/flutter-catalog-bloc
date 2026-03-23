@@ -7,13 +7,13 @@ workflows:
       flutter: stable
 
     scripts:
-      - name: Get packages
+      - name: Get Flutter packages
         script: flutter pub get
 
-      - name: Build APK
+      - name: Build Release APK
         script: flutter build apk --release
 
-      - name: Build AAB
+      - name: Build Release AAB
         script: flutter build appbundle --release
 
     artifacts:
