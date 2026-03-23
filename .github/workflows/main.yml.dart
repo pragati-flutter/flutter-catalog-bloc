@@ -24,7 +24,7 @@ with:
 channel: 'stable'
 architecture: x64
 
-- run: flutter build apk --release --split-per-abi
+- run: flutter build appbundle --release
 - run:
 flutter build ios --no-codesign
 cd build/ios/iphoneos
@@ -36,7 +36,7 @@ zip -r app.ipa Payload
 - name: Push to Releases
 uses: ncipollo/release-action@v1
 with:
-artifacts: "build/app/outputs/apk/release/*,build/ios/iphoneos/app.ipa"
+artifacts: "build/app/outputs/bundle/release/app-release.aab,build/ios/iphoneos/app.ipa"
 tag: v1.0.${{ github.run_number }}
 token: ${{ secrets.TOKEN }}
 
