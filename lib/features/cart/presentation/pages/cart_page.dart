@@ -19,12 +19,12 @@ class CartPage extends StatelessWidget {
           if (state is CartLoadingState) {
             return Center(child: CircularProgressIndicator());
           }
-         /* if (state is CartLoadedState) {
-            if(state.products.isEmpty){
-              return Center(child: Text("product not found"),);
+          if (state is CartLoadedState) {
+            if (state.products.isEmpty) {
+              return Center(child: Text("product not found"));
             }
             return ListView.builder(
-            itemCount: state.products.length,
+              itemCount: state.products.length,
               itemBuilder: (context, index) {
                 final cartItem = state.products[index];
                 final product = cartItem.productEntity;
@@ -42,7 +42,7 @@ class CartPage extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Image.network(
-                            product.images![0],
+                            product.images[0],
                             height: 70,
                             width: 70,
                             fit: BoxFit.cover,
@@ -64,31 +64,39 @@ class CartPage extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Spacer(), 
+                                  Spacer(),
                                   InkWell(
-                                      onTap: (){
-                                        context.read<CartBloc>().add(RemoveItemToCartEvent(product.id,state.products));
-                                        ToastMessage.showToast(context, 'cart removed successfully');
-                                      },
-                                      child: Icon(Icons.remove)),
+                                    onTap: () {
+                                      context.read<CartBloc>().add(
+                                        RemoveItemToCartEvent(
+                                          product.id,
+                                          state.products,
+                                        ),
+                                      );
+                                      ToastMessage.showToast(
+                                        context,
+                                        'cart removed successfully',
+                                      );
+                                    },
+                                    child: Icon(Icons.remove),
+                                  ),
                                 ],
                               ),
 
                               const SizedBox(height: 4),
 
                               Text(
-                                product.description!,
+                                product.description,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(fontSize: 12),
                               ),
 
-
                               const SizedBox(height: 6),
 
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "\$${product.price}",
@@ -98,7 +106,6 @@ class CartPage extends StatelessWidget {
                                       color: Colors.green,
                                     ),
                                   ),
-
 
                                   Text(
                                     "Qty: ${cartItem.quantity}",
@@ -114,17 +121,6 @@ class CartPage extends StatelessWidget {
                   ),
                 );
               },
-            );
-          }*/
-
-
-
-          if (state is CartLoadedState) {
-            if(state.products.isEmpty){
-              return Center(child: Text("hello world"),);
-            }
-            return Container(
-              child: Center(child: Text("hello machine")),
             );
           }
 

@@ -32,10 +32,20 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final result = await getProducts.getAllProducts();
       print("result is given by...$result");
       result.fold(
-        (failure) => emit(ProductError(_mapFailureToMessage(failure))),
-        (products) => emit(ProductLoadedState(products)),
+        (failure) {
+          print("FAILURE TYPE: ${failure.runtimeType}");
+          emit(ProductError(_mapFailureToMessage(failure)));
+        },
+        (products) {
+          print("SUCCESS: ${products.length} products");
+          emit(ProductLoadedState(products));
+        },
       );
-    } catch (e) {
+      print("hey my name is getProductDetails");
+
+    } catch (e,stackTrace) {
+      print("error is ...$e");
+      print('stackTrace is ...$stackTrace');
       emit(ProductError("Unexpected Error"));
     }
   }
@@ -45,6 +55,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     Emitter<ProductState> emit,
   ) async {
     try {
+
       emit(ProductLoadingState());
       final result = await getProductDetails.getProductDetails(event.id);
       result.fold(
@@ -52,7 +63,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         (product) => emit(ProductDetailLoadedState(product)),
 
       );
-    } catch (e) {
+    } catch (e,stackTrace) {
+     print("error is ...$e");
+     print('stackTrace is ...$stackTrace');
       emit(ProductError('Unexpected error'));
     }
   }

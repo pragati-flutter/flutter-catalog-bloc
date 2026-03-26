@@ -1,3 +1,4 @@
+/*
 import 'package:catalog_app/features/products/data/models/product_models.dart';
 
 import '../../domain/entites/cart_entity.dart';
@@ -36,4 +37,4 @@ class CartItemModel extends CartEntity {
       productEntity: productEntity,
     );
   }
-}
+}*/

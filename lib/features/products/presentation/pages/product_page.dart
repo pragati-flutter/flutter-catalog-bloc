@@ -30,10 +30,12 @@ class ProductPage extends StatelessWidget {
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
           if (state is ProductLoadingState) {
+            print("state is productLoading state ");
             return const Center(child: CircularProgressIndicator());
           }
 
           if (state is ProductLoadedState) {
+            print("state is productLoadedState");
             return Column(
               children: [
                 ProductSearchBar(),
@@ -46,6 +48,9 @@ class ProductPage extends StatelessWidget {
                       mainAxisSpacing: 5,
                     ),
                     itemBuilder: (context, index) {
+                      final product = state.products[index];
+                      final imgs = product.images;
+
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
@@ -53,42 +58,39 @@ class ProductPage extends StatelessWidget {
                             Navigator.pushNamed(
                               context,
                               AppRoutes.productDetails,
-                              arguments: state.products[index].id,
+                              arguments: product.id,
                             );
                           },
                           onDoubleTap: () {
                             final cartItem = CartEntity(
-                              productEntity: state.products[index],
+                              productEntity: product,
                               quantity: 1,
                             );
                             context.read<CartBloc>().add(
                               AddItemsToCartEvent(cartItem: cartItem),
                             );
-                            ToastMessage.showToast(
-                              context,
-                              "item added successfully",
-                            );
+                            ToastMessage.showToast(context, "item added successfully");
                           },
                           child: Container(
-                            height: 600,
                             decoration: BoxDecoration(
                               color: Colors.indigo.withAlpha(50),
                               borderRadius: BorderRadius.circular(10),
-
-                              border: Border.all(
-                                color: Colors.indigo.shade600,
-                                width: 1,
-                              ),
+                              border: Border.all(color: Colors.indigo.shade600, width: 1),
                             ),
-
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                //Image.asset(state.products[index].images![index]),
                                 Expanded(
-                                  child: Image.network(
-                                    state.products[index].images![0],
+                                  child: (imgs.isNotEmpty)  // ✅ safe check
+                                      ? Image.network(
+                                    imgs[0],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    errorBuilder: (_, __, ___) =>
+                                    const Icon(Icons.broken_image, size: 60),
+                                  )
+                                      : const Center(
+                                    child: Icon(Icons.image_not_supported, size: 60),
                                   ),
                                 ),
                                 Padding(
@@ -97,22 +99,20 @@ class ProductPage extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          state.products[index].title,
+                                          product.title,
                                           maxLines: 2,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             color: Colors.black87,
                                             fontWeight: FontWeight.bold,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ),
-                                      Spacer(),
                                       Text(
-                                        "${state.products[index].price}",
-                                        style: TextStyle(
+                                        "\$${product.price}",
+                                        style: const TextStyle(
                                           color: Colors.black87,
                                           fontWeight: FontWeight.bold,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                     ],
@@ -155,6 +155,7 @@ class ProductPage extends StatelessWidget {
           }
 
           if (state is ProductError) {
+            print("state is ProductError");
             return Center(child: Text(state.message));
           }
 

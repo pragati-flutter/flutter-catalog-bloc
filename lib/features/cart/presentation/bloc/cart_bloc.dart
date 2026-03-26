@@ -1,13 +1,7 @@
-import 'package:catalog_app/core/error/failure.dart';
-import 'package:catalog_app/features/cart/data/models/cart_models.dart';
 import 'package:catalog_app/features/cart/domain/usecases/add_to_cart.dart';
 import 'package:catalog_app/features/cart/domain/usecases/get_cart_items.dart';
 import 'package:catalog_app/features/cart/domain/usecases/remove_from_cart.dart';
-import 'package:catalog_app/features/products/data/models/product_models.dart';
-import 'package:catalog_app/features/products/domain/entites/product_entity.dart';
-import 'package:catalog_app/features/products/domain/usecases/get_product_details.dart';
-import 'package:catalog_app/features/products/domain/usecases/get_products.dart';
-import 'package:dartz/dartz.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -20,6 +14,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   final AddToCart addToCart;
   final RemoveFromCart removeFromCart;
   final GetCartItem getCartItems;
+
 
   CartBloc(this.addToCart, this.removeFromCart, this.getCartItems)
       : super((CartInitialState())) {
@@ -61,9 +56,19 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     try {
       emit(CartLoadingState());
       final result = removeFromCart(event.id);
-      result.fold((failure) => emit(CartError('Cache Error')), (_) =>
-          emit(CartSuccessState("cart remove successfully")));
-      emit(CartLoadedState(event.entity));
+
+
+      result.fold(
+            (failure) => emit(CartError('Cache Error')),
+            (_) {
+          // Step 2 — fetch fresh updated list from datasource
+          final freshResult = getCartItems();
+          freshResult.fold(
+                (failure) => emit(CartError('Cache Error')),
+                (updatedList) => emit(CartLoadedState(updatedList)),
+          );
+        },
+      );
 
     } catch (e) {
       emit(CartError(e.toString()));

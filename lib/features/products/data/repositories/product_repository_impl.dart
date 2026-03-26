@@ -13,10 +13,15 @@ class ProductRepositoryImplementation implements ProductRepository {
   Future<Either<Failure, List<ProductEntity>>> getProducts() async {
     try {
       final productList = await remoteDataSource.getProducts();
-      return Right(productList);
+      final entities = productList.map((e) => e.toEntity()).toList();
+
+
+      return Right(entities);
     } on NetworkException {
+      print("here is network exception found");
       return Left(NetworkFailure());
     } on ServerException {
+      print("here is server exception found");
       return Left(ServerFailure());
     }
   }
@@ -25,7 +30,7 @@ class ProductRepositoryImplementation implements ProductRepository {
   Future<Either<Failure, ProductEntity>> getProductDetails(int id) async {
     try {
       final product = await remoteDataSource.getProductDetails(id);
-      return Right(product);
+      return Right(product.toEntity());
     } on NetworkException {
       return Left(NetworkFailure());
     } on ServerException {
@@ -41,7 +46,9 @@ class ProductRepositoryImplementation implements ProductRepository {
     try {
       print("data level query is given by ...${query}");
       final productList = await remoteDataSource.searchProduct(query);
-      return Right(productList);
+      final entities = productList.map((e) => e.toEntity()).toList();
+
+      return Right(entities);
     } on NetworkException {
       return Left(NetworkFailure());
     } on ServerException {

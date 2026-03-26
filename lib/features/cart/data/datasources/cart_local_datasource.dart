@@ -4,6 +4,8 @@ import 'package:catalog_app/features/cart/data/models/cart_models.dart';
 import 'package:catalog_app/features/products/data/models/product_models.dart';
 import 'package:dio/dio.dart';
 
+import '../models/cart_item_model.dart';
+
 abstract class CartLocalDataSource {
   List<CartItemModel> getCartItems();
   void addToCart(CartItemModel cartItem);
