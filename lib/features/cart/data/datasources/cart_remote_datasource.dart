@@ -1,18 +1,14 @@
 import 'package:catalog_app/core/error/exceptions.dart';
-import 'package:catalog_app/core/network/dio_client.dart';
-import 'package:catalog_app/features/cart/data/models/cart_models.dart';
-import 'package:catalog_app/features/products/data/models/product_models.dart';
-import 'package:dio/dio.dart';
 
 import '../models/cart_item_model.dart';
 
-abstract class CartLocalDataSource {
+abstract class CartRemoteDataSource {
   List<CartItemModel> getCartItems();
   void addToCart(CartItemModel cartItem);
   void removeFromCart(int productId);
 }
 
-class CartLocalDatasourceImplementation implements CartLocalDataSource {
+class CartLocalDatasourceImplementation implements CartRemoteDataSource {
   final List<CartItemModel> _cartItemList = [];
 
   @override

@@ -1,5 +1,5 @@
 
-import 'package:catalog_app/features/cart/data/datasources/cart_local_datasource.dart';
+import 'package:catalog_app/features/cart/data/datasources/cart_remote_datasource.dart';
 import 'package:catalog_app/features/cart/data/repositories/cart_repository_impl.dart';
 import 'package:catalog_app/features/cart/domain/repositories/cart_repository.dart';
 import 'package:catalog_app/features/cart/domain/usecases/add_to_cart.dart';
