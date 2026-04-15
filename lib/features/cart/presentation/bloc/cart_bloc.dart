@@ -29,7 +29,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     try {
       emit(CartLoadingState());
 
-      final result = getCartItems();
+      final result = await getCartItems();
       print("result is ....$result");
       result.fold(
         (failure) => emit(CartError('Cache Error ')),
@@ -64,9 +64,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartLoadingState());
       final result = removeFromCart(event.id);
 
-      result.fold((failure) => emit(CartError('Cache Error')), (_) {
+      result.fold((failure) => emit(CartError('Cache Error')), (_) async {
         // Step 2 — fetch fresh updated list from datasource
-        final freshResult = getCartItems();
+        final freshResult = await getCartItems();
         freshResult.fold(
           (failure) => emit(CartError('Cache Error')),
           (updatedList) => emit(CartLoadedState(updatedList)),

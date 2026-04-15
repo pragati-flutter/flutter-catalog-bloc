@@ -14,7 +14,7 @@ extension ProductModelMapper on ProductModel {
       brand: brand,
       category: category,
       thumbnail: thumbnail,
-      images: images,
+      images: images, localImagePath: localImagePath,
     );
   }
 }
@@ -33,6 +33,7 @@ extension ProductEntityMapper on ProductEntity {
       category: category,
       thumbnail: thumbnail,
       images: images,
+      localImagePath: localImagePath
     );
   }
 }

@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProductModel {
 
- int get id; String get title; String get description; double get price; double get discountPercentage; double get rating; int get stock; String get brand; String get category; String get thumbnail; List<String> get images;
+ int get id; String get title; String get description; double get price; double get discountPercentage; double get rating; int get stock; String get brand; String get category; String get thumbnail;/// 🔥 IMPORTANT: no @Default here
+@JsonKey(fromJson: imagesFromJson, toJson: imagesToJson) List<String> get images;/// 🔥 for offline image
+ String get localImagePath;
 /// Create a copy of ProductModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +30,16 @@ $ProductModelCopyWith<ProductModel> get copyWith => _$ProductModelCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductModel&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.price, price) || other.price == price)&&(identical(other.discountPercentage, discountPercentage) || other.discountPercentage == discountPercentage)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.stock, stock) || other.stock == stock)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.category, category) || other.category == category)&&(identical(other.thumbnail, thumbnail) || other.thumbnail == thumbnail)&&const DeepCollectionEquality().equals(other.images, images));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductModel&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.price, price) || other.price == price)&&(identical(other.discountPercentage, discountPercentage) || other.discountPercentage == discountPercentage)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.stock, stock) || other.stock == stock)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.category, category) || other.category == category)&&(identical(other.thumbnail, thumbnail) || other.thumbnail == thumbnail)&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.localImagePath, localImagePath) || other.localImagePath == localImagePath));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,description,price,discountPercentage,rating,stock,brand,category,thumbnail,const DeepCollectionEquality().hash(images));
+int get hashCode => Object.hash(runtimeType,id,title,description,price,discountPercentage,rating,stock,brand,category,thumbnail,const DeepCollectionEquality().hash(images),localImagePath);
 
 @override
 String toString() {
-  return 'ProductModel(id: $id, title: $title, description: $description, price: $price, discountPercentage: $discountPercentage, rating: $rating, stock: $stock, brand: $brand, category: $category, thumbnail: $thumbnail, images: $images)';
+  return 'ProductModel(id: $id, title: $title, description: $description, price: $price, discountPercentage: $discountPercentage, rating: $rating, stock: $stock, brand: $brand, category: $category, thumbnail: $thumbnail, images: $images, localImagePath: $localImagePath)';
 }
 
 
@@ -48,7 +50,7 @@ abstract mixin class $ProductModelCopyWith<$Res>  {
   factory $ProductModelCopyWith(ProductModel value, $Res Function(ProductModel) _then) = _$ProductModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String title, String description, double price, double discountPercentage, double rating, int stock, String brand, String category, String thumbnail, List<String> images
+ int id, String title, String description, double price, double discountPercentage, double rating, int stock, String brand, String category, String thumbnail,@JsonKey(fromJson: imagesFromJson, toJson: imagesToJson) List<String> images, String localImagePath
 });
 
 
@@ -65,7 +67,7 @@ class _$ProductModelCopyWithImpl<$Res>
 
 /// Create a copy of ProductModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? description = null,Object? price = null,Object? discountPercentage = null,Object? rating = null,Object? stock = null,Object? brand = null,Object? category = null,Object? thumbnail = null,Object? images = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? description = null,Object? price = null,Object? discountPercentage = null,Object? rating = null,Object? stock = null,Object? brand = null,Object? category = null,Object? thumbnail = null,Object? images = null,Object? localImagePath = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -78,7 +80,8 @@ as int,brand: null == brand ? _self.brand : brand // ignore: cast_nullable_to_no
 as String,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as String,thumbnail: null == thumbnail ? _self.thumbnail : thumbnail // ignore: cast_nullable_to_non_nullable
 as String,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
-as List<String>,
+as List<String>,localImagePath: null == localImagePath ? _self.localImagePath : localImagePath // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -163,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String title,  String description,  double price,  double discountPercentage,  double rating,  int stock,  String brand,  String category,  String thumbnail,  List<String> images)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String title,  String description,  double price,  double discountPercentage,  double rating,  int stock,  String brand,  String category,  String thumbnail, @JsonKey(fromJson: imagesFromJson, toJson: imagesToJson)  List<String> images,  String localImagePath)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProductModel() when $default != null:
-return $default(_that.id,_that.title,_that.description,_that.price,_that.discountPercentage,_that.rating,_that.stock,_that.brand,_that.category,_that.thumbnail,_that.images);case _:
+return $default(_that.id,_that.title,_that.description,_that.price,_that.discountPercentage,_that.rating,_that.stock,_that.brand,_that.category,_that.thumbnail,_that.images,_that.localImagePath);case _:
   return orElse();
 
 }
@@ -184,10 +187,10 @@ return $default(_that.id,_that.title,_that.description,_that.price,_that.discoun
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String title,  String description,  double price,  double discountPercentage,  double rating,  int stock,  String brand,  String category,  String thumbnail,  List<String> images)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String title,  String description,  double price,  double discountPercentage,  double rating,  int stock,  String brand,  String category,  String thumbnail, @JsonKey(fromJson: imagesFromJson, toJson: imagesToJson)  List<String> images,  String localImagePath)  $default,) {final _that = this;
 switch (_that) {
 case _ProductModel():
-return $default(_that.id,_that.title,_that.description,_that.price,_that.discountPercentage,_that.rating,_that.stock,_that.brand,_that.category,_that.thumbnail,_that.images);case _:
+return $default(_that.id,_that.title,_that.description,_that.price,_that.discountPercentage,_that.rating,_that.stock,_that.brand,_that.category,_that.thumbnail,_that.images,_that.localImagePath);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +207,10 @@ return $default(_that.id,_that.title,_that.description,_that.price,_that.discoun
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String title,  String description,  double price,  double discountPercentage,  double rating,  int stock,  String brand,  String category,  String thumbnail,  List<String> images)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String title,  String description,  double price,  double discountPercentage,  double rating,  int stock,  String brand,  String category,  String thumbnail, @JsonKey(fromJson: imagesFromJson, toJson: imagesToJson)  List<String> images,  String localImagePath)?  $default,) {final _that = this;
 switch (_that) {
 case _ProductModel() when $default != null:
-return $default(_that.id,_that.title,_that.description,_that.price,_that.discountPercentage,_that.rating,_that.stock,_that.brand,_that.category,_that.thumbnail,_that.images);case _:
+return $default(_that.id,_that.title,_that.description,_that.price,_that.discountPercentage,_that.rating,_that.stock,_that.brand,_that.category,_that.thumbnail,_that.images,_that.localImagePath);case _:
   return null;
 
 }
@@ -219,7 +222,7 @@ return $default(_that.id,_that.title,_that.description,_that.price,_that.discoun
 @JsonSerializable()
 
 class _ProductModel extends ProductModel {
-  const _ProductModel({this.id = 0, this.title = '', this.description = '', this.price = 0.0, this.discountPercentage = 0.0, this.rating = 0.0, this.stock = 0, this.brand = '', this.category = '', this.thumbnail = '', final  List<String> images = const <String>[]}): _images = images,super._();
+  const _ProductModel({this.id = 0, this.title = '', this.description = '', this.price = 0.0, this.discountPercentage = 0.0, this.rating = 0.0, this.stock = 0, this.brand = '', this.category = '', this.thumbnail = '', @JsonKey(fromJson: imagesFromJson, toJson: imagesToJson) required final  List<String> images, this.localImagePath = ''}): _images = images,super._();
   factory _ProductModel.fromJson(Map<String, dynamic> json) => _$ProductModelFromJson(json);
 
 @override@JsonKey() final  int id;
@@ -232,13 +235,17 @@ class _ProductModel extends ProductModel {
 @override@JsonKey() final  String brand;
 @override@JsonKey() final  String category;
 @override@JsonKey() final  String thumbnail;
+/// 🔥 IMPORTANT: no @Default here
  final  List<String> _images;
-@override@JsonKey() List<String> get images {
+/// 🔥 IMPORTANT: no @Default here
+@override@JsonKey(fromJson: imagesFromJson, toJson: imagesToJson) List<String> get images {
   if (_images is EqualUnmodifiableListView) return _images;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_images);
 }
 
+/// 🔥 for offline image
+@override@JsonKey() final  String localImagePath;
 
 /// Create a copy of ProductModel
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +260,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductModel&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.price, price) || other.price == price)&&(identical(other.discountPercentage, discountPercentage) || other.discountPercentage == discountPercentage)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.stock, stock) || other.stock == stock)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.category, category) || other.category == category)&&(identical(other.thumbnail, thumbnail) || other.thumbnail == thumbnail)&&const DeepCollectionEquality().equals(other._images, _images));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductModel&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.price, price) || other.price == price)&&(identical(other.discountPercentage, discountPercentage) || other.discountPercentage == discountPercentage)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.stock, stock) || other.stock == stock)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.category, category) || other.category == category)&&(identical(other.thumbnail, thumbnail) || other.thumbnail == thumbnail)&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.localImagePath, localImagePath) || other.localImagePath == localImagePath));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,description,price,discountPercentage,rating,stock,brand,category,thumbnail,const DeepCollectionEquality().hash(_images));
+int get hashCode => Object.hash(runtimeType,id,title,description,price,discountPercentage,rating,stock,brand,category,thumbnail,const DeepCollectionEquality().hash(_images),localImagePath);
 
 @override
 String toString() {
-  return 'ProductModel(id: $id, title: $title, description: $description, price: $price, discountPercentage: $discountPercentage, rating: $rating, stock: $stock, brand: $brand, category: $category, thumbnail: $thumbnail, images: $images)';
+  return 'ProductModel(id: $id, title: $title, description: $description, price: $price, discountPercentage: $discountPercentage, rating: $rating, stock: $stock, brand: $brand, category: $category, thumbnail: $thumbnail, images: $images, localImagePath: $localImagePath)';
 }
 
 
@@ -273,7 +280,7 @@ abstract mixin class _$ProductModelCopyWith<$Res> implements $ProductModelCopyWi
   factory _$ProductModelCopyWith(_ProductModel value, $Res Function(_ProductModel) _then) = __$ProductModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String title, String description, double price, double discountPercentage, double rating, int stock, String brand, String category, String thumbnail, List<String> images
+ int id, String title, String description, double price, double discountPercentage, double rating, int stock, String brand, String category, String thumbnail,@JsonKey(fromJson: imagesFromJson, toJson: imagesToJson) List<String> images, String localImagePath
 });
 
 
@@ -290,7 +297,7 @@ class __$ProductModelCopyWithImpl<$Res>
 
 /// Create a copy of ProductModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? description = null,Object? price = null,Object? discountPercentage = null,Object? rating = null,Object? stock = null,Object? brand = null,Object? category = null,Object? thumbnail = null,Object? images = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? description = null,Object? price = null,Object? discountPercentage = null,Object? rating = null,Object? stock = null,Object? brand = null,Object? category = null,Object? thumbnail = null,Object? images = null,Object? localImagePath = null,}) {
   return _then(_ProductModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -303,7 +310,8 @@ as int,brand: null == brand ? _self.brand : brand // ignore: cast_nullable_to_no
 as String,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as String,thumbnail: null == thumbnail ? _self.thumbnail : thumbnail // ignore: cast_nullable_to_non_nullable
 as String,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
-as List<String>,
+as List<String>,localImagePath: null == localImagePath ? _self.localImagePath : localImagePath // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

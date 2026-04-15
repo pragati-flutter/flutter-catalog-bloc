@@ -7,7 +7,7 @@ class GetCartItem{
   final CartRepository cartRepository;
   GetCartItem(this.cartRepository);
 
-  Either<Failure, List<CartEntity>>call(){
+  Future<Either<Failure, List<CartEntity>>>call(){
     return cartRepository.getAllCartItems();
   }
 }

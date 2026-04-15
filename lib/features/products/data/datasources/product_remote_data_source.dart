@@ -21,11 +21,14 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         final productList = (response.data['products'] as List)
             .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
             .toList();
+
+
         if (kDebugMode) {
           print("product list images is given by ..${productList[1].images}");
         }
         return productList;
       } else {
+
         throw ServerException();
       }
     } on DioException {

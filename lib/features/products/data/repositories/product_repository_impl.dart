@@ -5,6 +5,7 @@ import 'package:catalog_app/features/products/data/datasources/product_remote_da
 import 'package:catalog_app/features/products/domain/entites/product_entity.dart';
 import 'package:catalog_app/features/products/domain/repositories/product_repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 
 class ProductRepositoryImplementation implements ProductRepository {
   final ProductRemoteDataSource remoteDataSource;
@@ -14,21 +15,31 @@ class ProductRepositoryImplementation implements ProductRepository {
   @override
   Future<Either<Failure, List<ProductEntity>>> getProducts() async {
     try {
+      //  API call
       final productList = await remoteDataSource.getProducts();
 
+      //  Save to local DB
       await localDataSource.cacheProducts(productList);
+      print(" Data saved to DB");
 
       final entities = productList.map((e) => e.toEntity()).toList();
 
-      return Right(entities);
-    } on NetworkException {
       final localProducts = await localDataSource.getProduct();
-      final entities = localProducts.map((e) => e.toEntity()).toList();
-      print("here is network exception found");
+      print("local product is given by ${localProducts}");
       return Right(entities);
-    } on ServerException {
-      print("here is server exception found");
-      return Left(ServerFailure());
+
+    } catch (e) {
+      print("Loading from DB because of error: $e");
+
+      final localProducts = await localDataSource.getProduct();
+      print("local product is given by ${localProducts}");
+
+      if (localProducts.isNotEmpty) {
+        final entities = localProducts.map((e) => e.toEntity()).toList();
+        return Right(entities);
+      } else {
+        return Left(ServerFailure()); // or CacheFailure
+      }
     }
   }
 

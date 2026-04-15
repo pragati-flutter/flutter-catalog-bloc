@@ -1,5 +1,6 @@
 import 'package:catalog_app/core/database/database_helper.dart';
 import 'package:catalog_app/features/cart/data/models/cart_item_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class CartLocalDataSource {
@@ -16,8 +17,9 @@ class CartLocalDataSourceImplementation implements CartLocalDataSource {
   @override
   Future<void> addToCartItem(CartItemModel cartItem) async{
     final db = await databaseHelper.database;
+    debugPrint('${cartItem.toJson()}');
     await  db.insert('cart',
-    cartItem.toJson(),
+    cartItem.toDbJson(),
       conflictAlgorithm: ConflictAlgorithm.replace
     );
   }

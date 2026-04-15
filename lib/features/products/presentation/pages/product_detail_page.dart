@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:catalog_app/features/products/presentation/bloc/product_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +12,12 @@ class ProductDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Product Details", style: TextStyle(color: Colors.white)),
+        title: const Text(
+          "Product Details",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.pink,
+
       ),
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
@@ -25,7 +31,30 @@ class ProductDetailPage extends StatelessWidget {
                 SizedBox(
                   height: 400,
                   width: double.infinity,
-                  child: Image.network(state.product.images![0]),
+                  child:
+                      (state.product.localImagePath.isNotEmpty &&
+                          File(state.product.localImagePath).existsSync())
+                      ? Image.file(
+                          File(state.product.localImagePath),
+                          fit: BoxFit.cover,
+                        )
+                      : (state.product.images.isNotEmpty
+                            ? Image.network(
+                                state.product.images[0],
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) {
+                                  return const Icon(
+                                    Icons.broken_image,
+                                    size: 80,
+                                  );
+                                },
+                              )
+                            : const Center(
+                                child: Icon(
+                                  Icons.image_not_supported,
+                                  size: 80,
+                                ),
+                              )),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

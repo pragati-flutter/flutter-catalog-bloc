@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:catalog_app/core/routes/app_routes.dart';
 import 'package:catalog_app/core/utils/toast_helper.dart';
 import 'package:catalog_app/features/cart/domain/entites/cart_entity.dart';
@@ -49,7 +51,6 @@ class ProductPage extends StatelessWidget {
                     ),
                     itemBuilder: (context, index) {
                       final product = state.products[index];
-                      final imgs = product.images;
 
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -60,6 +61,7 @@ class ProductPage extends StatelessWidget {
                               AppRoutes.productDetails,
                               arguments: product.id,
                             );
+
                           },
                           onDoubleTap: () {
                             final cartItem = CartEntity(
@@ -69,29 +71,52 @@ class ProductPage extends StatelessWidget {
                             context.read<CartBloc>().add(
                               AddItemsToCartEvent(cartItem: cartItem),
                             );
-                            ToastMessage.showToast(context, "item added successfully");
+                            ToastMessage.showToast(
+                              context,
+                              "item added successfully",
+                            );
                           },
                           child: Container(
                             decoration: BoxDecoration(
                               color: Colors.indigo.withAlpha(50),
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.indigo.shade600, width: 1),
+                              border: Border.all(
+                                color: Colors.indigo.shade600,
+                                width: 1,
+                              ),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
-                                  child: (imgs.isNotEmpty)  // ✅ safe check
-                                      ? Image.network(
-                                    imgs[0],
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    errorBuilder: (_, __, ___) =>
-                                    const Icon(Icons.broken_image, size: 60),
-                                  )
-                                      : const Center(
-                                    child: Icon(Icons.image_not_supported, size: 60),
-                                  ),
+                                  child:
+                                      (product.localImagePath.isNotEmpty &&
+                                          File(
+                                            product.localImagePath,
+                                          ).existsSync())
+                                      ? Image.file(
+                                          File(product.localImagePath),
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                        )
+                                      : (product.images.isNotEmpty
+                                            ? Image.network(
+                                                product.images[0],
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                errorBuilder: (_, __, ___) {
+                                                  return const Icon(
+                                                    Icons.broken_image,
+                                                    size: 60,
+                                                  );
+                                                },
+                                              )
+                                            : const Center(
+                                                child: Icon(
+                                                  Icons.image_not_supported,
+                                                  size: 60,
+                                                ),
+                                              )),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),

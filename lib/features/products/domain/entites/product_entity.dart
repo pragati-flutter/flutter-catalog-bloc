@@ -12,6 +12,7 @@ class ProductEntity extends Equatable {
   final String category;
   final String thumbnail;
   final List<String> images;
+  final String localImagePath;
 
   const ProductEntity({
     required this.id,
@@ -25,6 +26,7 @@ class ProductEntity extends Equatable {
     required this.category,
     required this.thumbnail,
     required this.images,
+    required this.localImagePath,
   });
 
 
@@ -41,5 +43,6 @@ class ProductEntity extends Equatable {
     category,
     thumbnail,
     images,
+    localImagePath
   ];
 }

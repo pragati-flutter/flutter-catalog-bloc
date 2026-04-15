@@ -6,23 +6,22 @@ part of 'product_models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_ProductModel _$ProductModelFromJson(
-  Map<String, dynamic> json,
-) => _ProductModel(
-  id: (json['id'] as num?)?.toInt() ?? 0,
-  title: json['title'] as String? ?? '',
-  description: json['description'] as String? ?? '',
-  price: (json['price'] as num?)?.toDouble() ?? 0.0,
-  discountPercentage: (json['discountPercentage'] as num?)?.toDouble() ?? 0.0,
-  rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
-  stock: (json['stock'] as num?)?.toInt() ?? 0,
-  brand: json['brand'] as String? ?? '',
-  category: json['category'] as String? ?? '',
-  thumbnail: json['thumbnail'] as String? ?? '',
-  images:
-      (json['images'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-      const <String>[],
-);
+_ProductModel _$ProductModelFromJson(Map<String, dynamic> json) =>
+    _ProductModel(
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      title: json['title'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      discountPercentage:
+          (json['discountPercentage'] as num?)?.toDouble() ?? 0.0,
+      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+      stock: (json['stock'] as num?)?.toInt() ?? 0,
+      brand: json['brand'] as String? ?? '',
+      category: json['category'] as String? ?? '',
+      thumbnail: json['thumbnail'] as String? ?? '',
+      images: imagesFromJson(json['images']),
+      localImagePath: json['localImagePath'] as String? ?? '',
+    );
 
 Map<String, dynamic> _$ProductModelToJson(_ProductModel instance) =>
     <String, dynamic>{
@@ -36,5 +35,6 @@ Map<String, dynamic> _$ProductModelToJson(_ProductModel instance) =>
       'brand': instance.brand,
       'category': instance.category,
       'thumbnail': instance.thumbnail,
-      'images': instance.images,
+      'images': imagesToJson(instance.images),
+      'localImagePath': instance.localImagePath,
     };

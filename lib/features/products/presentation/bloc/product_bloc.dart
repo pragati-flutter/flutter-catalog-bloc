@@ -1,92 +1,74 @@
-import 'package:catalog_app/core/error/failure.dart';
-import 'package:catalog_app/features/products/data/models/product_models.dart';
-import 'package:catalog_app/features/products/domain/usecases/get_product_details.dart';
-import 'package:catalog_app/features/products/domain/usecases/get_products.dart';
-import 'package:catalog_app/features/products/domain/usecases/search_products.dart';
-import 'package:dartz/dartz.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+
+import 'package:flutter/cupertino.dart';
+
+import '../../../../core/error/failure.dart';
+import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../domain/entites/product_entity.dart';
-
-part 'product_event.dart';
+import '../../domain/usecases/get_product_details.dart';
+import '../../domain/usecases/get_products.dart';
+import '../../domain/usecases/search_products.dart';
 part 'product_state.dart';
+part 'product_event.dart';
+
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final GetProducts getProducts;
   final GetProductDetails getProductDetails;
   final SearchProducts searchProducts;
-  ProductBloc(this.getProducts,this.getProductDetails,this.searchProducts) : super(ProductInitialState()) {
+
+  ProductBloc(
+      this.getProducts,
+      this.getProductDetails,
+      this.searchProducts,
+      ) : super(ProductInitialState()) {
     on<GetProductEvent>(_onGetProductEvent);
     on<GetProductDetailEvent>(_onGetProductDetailEvent);
     on<SearchProductEvent>(_onSearchProductEvent);
   }
 
   Future<void> _onGetProductEvent(
-    GetProductEvent event,
-    Emitter<ProductState> emit ,
-  ) async {
-    try {
-      emit(ProductLoadingState());
+      GetProductEvent event,
+      Emitter<ProductState> emit,
+      ) async {
+    emit(ProductLoadingState());
+    final result = await getProducts.getAllProducts();
+    debugPrint('result is given by ...${result}');
 
-      final result = await getProducts.getAllProducts();
-      print("result is given by...$result");
-      result.fold(
-        (failure) {
-          print("FAILURE TYPE: ${failure.runtimeType}");
-          emit(ProductError(_mapFailureToMessage(failure)));
-        },
-        (products) {
-          print("SUCCESS: ${products.length} products");
-          emit(ProductLoadedState(products));
-        },
-      );
-      print("hey my name is getProductDetails");
-
-    } catch (e,stackTrace) {
-      print("error is ...$e");
-      print('stackTrace is ...$stackTrace');
-      emit(ProductError("Unexpected Error"));
-    }
+    result.fold(
+          (failure) => emit(ProductError(_mapFailureToMessage(failure))),
+          (products) => emit(ProductLoadedState(products)),
+    );
   }
 
   Future<void> _onGetProductDetailEvent(
-    GetProductDetailEvent event,
-    Emitter<ProductState> emit,
-  ) async {
-    try {
+      GetProductDetailEvent event,
+      Emitter<ProductState> emit,
+      ) async {
+    emit(ProductLoadingState());
 
-      emit(ProductLoadingState());
-      final result = await getProductDetails.getProductDetails(event.id);
-      result.fold(
-        (failure) => emit(ProductError(_mapFailureToMessage(failure))),
-        (product) => emit(ProductDetailLoadedState(product)),
+    final result = await getProductDetails.getProductDetails(event.id);
 
-      );
-    } catch (e,stackTrace) {
-     print("error is ...$e");
-     print('stackTrace is ...$stackTrace');
-      emit(ProductError('Unexpected error'));
-    }
+    result.fold(
+          (failure) => emit(ProductError(_mapFailureToMessage(failure))),
+          (product) => emit(ProductDetailLoadedState(product)),
+    );
   }
-
-
 
   Future<void> _onSearchProductEvent(
       SearchProductEvent event,
       Emitter<ProductState> emit,
       ) async {
-    try {
-      emit(ProductLoadingState());
-      print("event query is given by ...${event.query}");
-      final result = await searchProducts(event.query);
-      result.fold(
-            (failure) => emit(SearchProductError(_mapFailureToMessage(failure))),
-            (product) => emit(ProductLoadedState(product)),
-      );
-    } catch (e) {
-      emit(ProductError('Unexpected error'));
-    }
+    emit(ProductLoadingState());
+
+    final result = await searchProducts(event.query);
+
+    result.fold(
+          (failure) => emit(SearchProductError(_mapFailureToMessage(failure))),
+          (products) => emit(ProductLoadedState(products)),
+    );
   }
 
   String _mapFailureToMessage(Failure failure) {

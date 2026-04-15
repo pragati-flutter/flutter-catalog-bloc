@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:catalog_app/features/products/data/models/product_models.dart';
@@ -43,4 +45,14 @@ abstract class CartItemModel with _$CartItemModel {
     quantity: quantity,
     productEntity: productEntity.toEntity(),
   );
+
+  Map<String, dynamic> toDbJson() {
+    return {
+      "id": productEntity.id,
+      "title": productEntity.title,
+      "price": productEntity.price,
+      "images": jsonEncode(productEntity.images),
+      "quantity": quantity,
+    };
+  }
 }

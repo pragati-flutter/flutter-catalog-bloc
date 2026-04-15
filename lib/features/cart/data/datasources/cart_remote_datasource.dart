@@ -8,7 +8,7 @@ abstract class CartRemoteDataSource {
   void removeFromCart(int productId);
 }
 
-class CartLocalDatasourceImplementation implements CartRemoteDataSource {
+class CartRemoteDatasourceImplementation implements CartRemoteDataSource {
   final List<CartItemModel> _cartItemList = [];
 
   @override
